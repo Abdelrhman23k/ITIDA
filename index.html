@@ -240,7 +240,7 @@
          <div class="px-4 md:px-8 flex flex-1 justify-center">
              <div class="flex flex-col max-w-7xl w-full">
                  <h2 class="text-[var(--royal-blue)] text-3xl md:text-4xl font-bold leading-tight tracking-tight px-4 pb-8 pt-5 text-center">Technological Infrastructure Showcase</h2>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="video-grid"></div>
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0" id="video-grid"></div>
              </div>
          </div>
     </section>
@@ -647,11 +647,43 @@
                 startAutoplay();
             }
 
-            // --- Video Showcase Logic ---
+            // --- Video Showcase Logic (Restored Original Design) ---
             const videoGrid = document.getElementById('video-grid');
             if (videoGrid) {
                 const videoData=[{title:"The Backbone of Connectivity",description:"Exploring the vast networks of fiber optics and data centers that power our digital world.",videoUrl:"http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"},{title:"Innovations in Server Architecture",description:"A deep dive into the latest advancements in server technology and cloud computing infrastructure.",videoUrl:"http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"},{title:"Securing the Digital Frontier",description:"Understanding the critical role of cybersecurity in protecting technological infrastructure.",videoUrl:"http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"}];let currentlyExpandedVideo=null,placeholder=null;const backdrop=document.getElementById('backdrop');
-                function createVideoCard(data){const card=document.createElement('div');card.className='group video-card relative flex flex-col cursor-pointer bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300';card.dataset.videoUrl=data.videoUrl;const videoContent=document.createElement('div');videoContent.className='relative w-full aspect-video video-content overflow-hidden';const previewContainer=document.createElement('div');previewContainer.className='preview-container absolute inset-0 transition-transform duration-300 ease-in-out group-hover:scale-105';const previewVideo=document.createElement('video');previewVideo.className='w-full h-full object-cover';previewVideo.src=data.videoUrl;previewVideo.muted=true;previewVideo.loop=true;previewVideo.playsInline=true;previewVideo.addEventListener('canplay',()=>previewVideo.play().catch(e=>console.log("Autoplay prevented")));previewVideo.addEventListener('timeupdate',function(){if(this.currentTime>3)this.currentTime=0});const overlay=document.createElement('div');overlay.className='absolute inset-0 bg-blue-900/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300';overlay.innerHTML=`<span class="material-icons-outlined text-white text-6xl" style="text-shadow: 0 1px 3px rgba(0,0,0,0.5)">play_circle</span>`;const textOverlay=document.createElement('div');textOverlay.className='absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent';textOverlay.innerHTML=`<h3 class="text-white text-lg font-semibold">${data.title}</h3>`;previewContainer.append(previewVideo,overlay,textOverlay);const videoPlayerContainer=document.createElement('div');videoPlayerContainer.className='video-player-container w-full h-full';const closeButton=document.createElement('button');closeButton.className='exit-button absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/75 transition-colors z-10';closeButton.innerHTML=`<span class="material-icons-outlined">close</span><span class="sr-only">Close video</span>`;closeButton.onclick=e=>{e.stopPropagation();collapseVideo(card)};videoContent.append(previewContainer,videoPlayerContainer);card.append(videoContent,closeButton);card.addEventListener('click',()=>handleCardClick(card));return card}
+                function createVideoCard(data){
+                    const card=document.createElement('div');
+                    card.className='group video-card relative flex flex-col cursor-pointer';
+                    card.dataset.videoUrl=data.videoUrl;
+                    const videoContent=document.createElement('div');
+                    videoContent.className='relative w-full aspect-[9/16] video-content overflow-hidden';
+                    const previewContainer=document.createElement('div');
+                    previewContainer.className='preview-container absolute inset-0 transition-transform duration-300 ease-in-out group-hover:scale-105';
+                    const previewVideo=document.createElement('video');
+                    previewVideo.className='w-full h-full object-cover';
+                    previewVideo.src=data.videoUrl;
+                    previewVideo.muted=true;
+                    previewVideo.loop=true;
+                    previewVideo.playsInline=true;
+                    previewVideo.addEventListener('canplay',()=>previewVideo.play().catch(e=>console.log("Autoplay prevented")));
+                    previewVideo.addEventListener('timeupdate',function(){if(this.currentTime>3)this.currentTime=0});
+                    const overlay=document.createElement('div');
+                    overlay.className='absolute inset-0 bg-blue-900/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300';
+                    overlay.innerHTML=`<span class="material-icons-outlined text-white text-6xl" style="text-shadow: 0 1px 3px rgba(0,0,0,0.5)">play_circle</span>`;
+                    const textOverlay=document.createElement('div');
+                    textOverlay.className='absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent';
+                    textOverlay.innerHTML=`<h3 class="text-white text-lg font-semibold">${data.title}</h3>`;
+                    previewContainer.append(previewVideo,overlay,textOverlay);
+                    const videoPlayerContainer=document.createElement('div');
+                    videoPlayerContainer.className='video-player-container w-full h-full';
+                    const closeButton=document.createElement('button');
+                    closeButton.className='exit-button absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/75 transition-colors z-10';
+                    closeButton.innerHTML=`<span class="material-icons-outlined">close</span><span class="sr-only">Close video</span>`;
+                    closeButton.onclick=e=>{e.stopPropagation();collapseVideo(card)};
+                    videoContent.append(previewContainer,videoPlayerContainer);card.append(videoContent,closeButton);
+                    card.addEventListener('click',()=>handleCardClick(card));
+                    return card
+                }
                 function handleCardClick(card){if(card.classList.contains('expanded'))return;if(currentlyExpandedVideo){currentlyExpandedVideo.addEventListener('transitionend',()=>expandVideo(card),{once:true});collapseVideo(currentlyExpandedVideo)}else expandVideo(card)}
                 function expandVideo(card){const rect=card.getBoundingClientRect();placeholder=document.createElement('div');placeholder.className='placeholder';placeholder.style.width=`${rect.width}px`;placeholder.style.height=`${rect.height}px`;card.parentNode.insertBefore(placeholder,card);card.style.position='fixed';card.style.top=`${rect.top}px`;card.style.left=`${rect.left}px`;card.style.width=`${rect.width}px`;card.style.height=`${rect.height}px`;card.style.margin='0';card.offsetHeight;backdrop.classList.add('active');document.body.style.overflow='hidden';card.classList.add('expanded');updateExpandedVideoSize(card);const playerContainer=card.querySelector('.video-player-container');const fullVideo=document.createElement('video');fullVideo.className='w-full h-full';fullVideo.src=card.dataset.videoUrl;fullVideo.controls=true;fullVideo.autoplay=true;playerContainer.appendChild(fullVideo);currentlyExpandedVideo=card}
                 function collapseVideo(card){if(!card||!placeholder)return;const originalRect=placeholder.getBoundingClientRect();card.style.width=`${originalRect.width}px`;card.style.height=`${originalRect.height}px`;card.style.top=`${originalRect.top}px`;card.style.left=`${originalRect.left}px`;card.style.transform='translate(0,0)';card.querySelector('.video-player-container').innerHTML='';card.addEventListener('transitionend',()=>{card.classList.remove('expanded');card.style.cssText='';if(placeholder){placeholder.replaceWith(card);placeholder=null}},{once:true});if(currentlyExpandedVideo===card){currentlyExpandedVideo=null;backdrop.classList.remove('active');document.body.style.overflow=''}}
